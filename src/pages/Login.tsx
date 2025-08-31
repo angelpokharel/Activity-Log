@@ -9,7 +9,7 @@ interface LoginValues {
 
 const LoginSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().min(8, "Password must be at least 8 characters").required("Enter your password"),
+  password: Yup.string().min(8).required("Enter your password"),
 });
 
 function Login() {
@@ -54,7 +54,7 @@ function Login() {
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         {formik.touched.email && formik.errors.email && (
           <div className="text-red-500 text-sm">{formik.errors.email}</div>
@@ -67,7 +67,7 @@ function Login() {
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         {formik.touched.password && formik.errors.password && (
           <div className="text-red-500 text-sm">{formik.errors.password}</div>
@@ -75,7 +75,7 @@ function Login() {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
+          className="bg-green-500 text-white py-2 rounded hover:bg-green-600 transition-colors"
         >
           Login
         </button>
@@ -83,7 +83,7 @@ function Login() {
         <p className="text-sm text-center">
           Don't have an account?{" "}
           <span
-            className="text-blue-500 cursor-pointer hover:underline"
+            className="text-green-500 cursor-pointer hover:underline"
             onClick={() => navigate("/signup")}
           >
             Signup

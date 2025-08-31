@@ -13,7 +13,7 @@ const SignupSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string().min(4, "Password must be at least 8 characters").required("Enter your password"),
-    confirmPassword: Yup.string().oneOf([Yup.ref('password')], "Passwords must match").required("Confirm your password"),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password'), undefined], "Passwords must match").required("Confirm your password"),
 });
 
 function Signup() {
@@ -27,14 +27,14 @@ function Signup() {
             const users: User[] = usersJson ? JSON.parse(usersJson) : [];
 
             if (users.find((u) => u.email === values.email)) {
-                alert("Email already registered");
+                alert("An account with this email already exists, use a different email");
                 return;
             }
 
             users.push(values);
             localStorage.setItem("users", JSON.stringify(users));
 
-            alert("Signup successful!");
+            alert("Registered successfully");
             navigate("/");
         },
     });
@@ -54,7 +54,7 @@ function Signup() {
                     value={formik.values.name}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 {formik.touched.name && formik.errors.name && (
                     <div className="text-red-500 text-sm">{formik.errors.name}</div>
@@ -67,7 +67,7 @@ function Signup() {
                     value={formik.values.email}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 {formik.touched.email && formik.errors.email && (
                     <div className="text-red-500 text-sm">{formik.errors.email}</div>
@@ -80,7 +80,7 @@ function Signup() {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 {formik.touched.password && formik.errors.password && (
                     <div className="text-red-500 text-sm">{formik.errors.password}</div>
@@ -93,7 +93,7 @@ function Signup() {
                     value={formik.values.confirmPassword}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-green-400"
                 />
                 {formik.touched.confirmPassword && formik.errors.confirmPassword && (
                     <div className="text-red-500 text-sm">{formik.errors.confirmPassword}</div>
@@ -101,7 +101,7 @@ function Signup() {
 
                 <button
                     type="submit"
-                    className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
+                    className="bg-green-500 text-white py-2 rounded hover:bg-green-600 transition-colors"
                 >
                     Signup
                 </button>
@@ -109,8 +109,8 @@ function Signup() {
                 <p className="text-sm text-center">
                     Already have an account?{" "}
                     <span
-                        className="text-blue-500 cursor-pointer hover:underline"
-                        onClick={() => navigate("/Login")}
+                        className="text-green-500 cursor-pointer hover:underline"
+                        onClick={() => navigate("/")}
                     >
                         Login
                     </span>
