@@ -1,36 +1,99 @@
-import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import type { Activity } from "../types";
 
-function UserPage() {
-    const { email } = useParams<{ email: string }>();
+interface UserPageProps {
+    activities: Activity[];
+}
+
+function UserPage({ activities }: UserPageProps) {
     const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+    const userJson = localStorage.getItem("currentUser");
+    const user = userJson ? JSON.parse(userJson) : null;
+
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
-
-        const token = localStorage.getItem("token");
-        const currentUserJson = localStorage.getItem("currentUser");
-        const currentUser = currentUserJson ? JSON.parse(currentUserJson) : null;
-
-        if (!token || !currentUser || currentUser.email !== email) {
-            navigate("/login");
+        if (!token || !user) {
+            navigate("/");
         }
-    }, [email, navigate]);
+    }, [token, user, navigate]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("currentUser");
-        navigate("/login");
+        navigate("/");
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <p className="text-xl mb-4">Welcome, {email}</p>
-            <button
-                onClick={handleLogout}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-            >
-                Logout
-            </button>
+        <div className="flex min-h-screen bg-gray-100">
+
+
+            <aside className="w-64 bg-white shadow-lg p-4 flex flex-col">
+                <h2 className="text-xl font-bold mb-4">Date</h2>
+                <div className="flex flex-col gap-2 overflow-y-auto max-h-[calc(100vh-4rem)]">
+                    {activities.length === 0 ? (
+                        <p className="text-gray-500 text-sm">No activities</p>
+                    ) : (
+                        activities.map((activity) => (
+                            <button
+                                key={activity.id}
+                                onClick={() => navigate(`activity/${activity.id}/view`)}
+                                className="text-left px-2 py-1 rounded hover:bg-green-100"
+                            >
+                                {new Date(activity.createdAt).toLocaleString()}
+                            </button>
+                        ))
+                    )}
+                </div>
+            </aside>
+
+
+            <div className="flex-1 flex flex-col">
+
+                <header className="bg-white shadow p-4 flex justify-between items-center">
+                    <h1 className="text-2xl font-semibold">Welcome, {user?.name}</h1>
+
+
+                    <div className="relative">
+                        <button
+                            onClick={() => setDropdownOpen(!dropdownOpen)}
+                            className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                        >
+                            {user?.email}
+                        </button>
+
+                        {dropdownOpen && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg flex flex-col">
+                                <button
+                                    onClick={() => { navigate("activity"); setDropdownOpen(false); }}
+                                    className="px-4 py-2 text-left hover:bg-green-100"
+                                >
+                                    Activity Log
+                                </button>
+                                <button
+                                    onClick={() => { navigate("profile"); setDropdownOpen(false); }}
+                                    className="px-4 py-2 text-left hover:bg-green-100"
+                                >
+                                    Profile
+                                </button>
+                                <button
+                                    onClick={() => { handleLogout(); setDropdownOpen(false); }}
+                                    className="px-4 py-2 text-left hover:bg-red-100 text-red-500"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </header>
+
+
+                <main className="flex-1 p-6">
+                    <Outlet />
+                </main>
+            </div>
         </div>
     );
 }
