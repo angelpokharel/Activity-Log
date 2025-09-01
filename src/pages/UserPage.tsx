@@ -31,8 +31,8 @@ function UserPage({ activities }: UserPageProps) {
 
 
             <aside className="w-64 bg-white shadow-lg p-4 flex flex-col">
-                <h2 className="text-xl font-bold mb-4">Date</h2>
-                <div className="flex flex-col gap-2 overflow-y-auto max-h-[calc(100vh-4rem)]">
+                <h2 className="text-xl font-bold mb-4">Activities by Date</h2>
+                <div className="flex flex-col gap-2 ">
                     {activities.length === 0 ? (
                         <p className="text-gray-500 text-sm">No activities</p>
                     ) : (
@@ -44,7 +44,9 @@ function UserPage({ activities }: UserPageProps) {
                             >
                                 {new Date(activity.createdAt).toLocaleString()}
                             </button>
+
                         ))
+
                     )}
                 </div>
             </aside>
@@ -65,7 +67,7 @@ function UserPage({ activities }: UserPageProps) {
                         </button>
 
                         {dropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg flex flex-col">
+                            <div className="absolute right-0 mt-2 w-48 bg-white border border-green-400 rounded shadow-lg flex flex-col">
                                 <button
                                     onClick={() => { navigate("activity"); setDropdownOpen(false); }}
                                     className="px-4 py-2 text-left hover:bg-green-100"
