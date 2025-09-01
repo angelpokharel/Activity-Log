@@ -25,16 +25,16 @@ export default function ActivityEdit({ activities, onUpdateActivity }: ActivityE
 
   return (
     <div className="p-4 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Edit Activity</h1>
+      <h1 className="text-2xl font-semibold mb-4">Edit Activity</h1>
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Activity"
-        className="border p-2 w-full h-40 mb-3 rounded"
+        className="border p-2 bg-white w-full h-40 mb-3 rounded"
       />
       <button
         onClick={handleSave}
-        className="bg-green-300 text-white px-4 py-2 rounded hover:bg-green-100"
+        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
       >
         Save
       </button>

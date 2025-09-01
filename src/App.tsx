@@ -7,11 +7,12 @@ import ActivityLog from "./pages/activitylog";
 import Profile from "./pages/profile";
 import type { Activity } from "./types";
 import ActivityEdit from "./activity/edit";
-import ActivityDetail from "./activity/detail";
 import ActivityView from "./activity/view";
 
 export default function App() {
-  const [activities, setActivities] = useState<Activity[]>([]);
+  const savedActivities = localStorage.getItem("activities");
+  const [activities, setActivities] = useState<Activity[]>(savedActivities ? JSON.parse(savedActivities) : []);
+
   const [nextId, setNextId] = useState(1);
 
   const addActivity = (): string => {
@@ -21,19 +22,32 @@ export default function App() {
       content: "",
       createdAt: new Date().toISOString()
     };
-    setActivities([newActivity, ...activities]);
+
+
+    const newActivities = [newActivity, ...activities];
+    setActivities(newActivities);
+
+
+    localStorage.setItem("activities", JSON.stringify(newActivities));
+
+
     setNextId(nextId + 1);
     return id;
   };
 
   const updateActivity = (id: string, updatedActivity: Activity) => {
-    setActivities(activities.map((activity) =>
+    const updatedActivities = activities.map((activity) =>
       activity.id === id ? updatedActivity : activity
-    ));
+    );
+
+    setActivities(updatedActivities);
+    localStorage.setItem("activities", JSON.stringify(updatedActivities));
   };
 
   const deleteActivity = (id: string) => {
-    setActivities(activities.filter((activity) => activity.id !== id));
+    const filteredActivities = activities.filter(activity => activity.id !== id);
+    setActivities(filteredActivities);
+    localStorage.setItem("activities", JSON.stringify(filteredActivities));
   };
 
   return (
@@ -42,7 +56,10 @@ export default function App() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        <Route path="/users/:email" element={<UserPage activities={activities} />}>
+        <Route
+          path="/users/:email"
+          element={<UserPage activities={activities} />}
+        >
 
           <Route
             path="activity"
@@ -55,7 +72,6 @@ export default function App() {
               />
             }
           />
-
           <Route
             path="activity/:id/edit"
             element={
@@ -69,11 +85,6 @@ export default function App() {
           <Route
             path="activity/:id/view"
             element={<ActivityView activities={activities} />}
-          />
-
-          <Route
-            path="activity/:id/detail"
-            element={<ActivityDetail activities={activities} />}
           />
 
           <Route path="profile" element={<Profile />} />

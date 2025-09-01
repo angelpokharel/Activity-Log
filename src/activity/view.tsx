@@ -6,7 +6,7 @@ interface ActivityViewProps {
 }
 
 export default function ActivityView({ activities }: ActivityViewProps) {
-  const { id } = useParams();
+  const { id, email } = useParams();
   const navigate = useNavigate();
   const activity = activities.find(a => a.id === id);
 
@@ -15,13 +15,15 @@ export default function ActivityView({ activities }: ActivityViewProps) {
   }
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
+    <div className="p-4 max-w-2xl mx-auto border border-black rounded bg-white">
+      <p className="text-sm text-gray-500 mb-1"> id: {activity.id}</p>
       <p className="mb-4">{activity.content}</p>
+
       <button
-        onClick={() => navigate("/users/current/activity")}
-        className="text-blue-500 hover:underline"
+        onClick={() => navigate(`/users/${email}/activity`)}
+        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
       >
-        Go Back
+        Back
       </button>
     </div>
   );
