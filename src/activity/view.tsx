@@ -6,9 +6,15 @@ interface ActivityViewProps {
 }
 
 export default function ActivityView({ activities }: ActivityViewProps) {
-  const { id, email } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const activity = activities.find(a => a.id === id);
+
+  const userJson = localStorage.getItem("currentUser");
+  const user = userJson ? JSON.parse(userJson) : null;
+
+  const activity = activities.find(
+    (a) => a.id === id && a.email === user?.email
+  );
 
   if (!activity) {
     return <p className="p-4 text-red-500">No activity</p>;
@@ -20,7 +26,7 @@ export default function ActivityView({ activities }: ActivityViewProps) {
       <p className="mb-4">{activity.content}</p>
 
       <button
-        onClick={() => navigate(`/users/${email}/activity`)}
+        onClick={() => navigate(`/users/${encodeURIComponent(user.email)}/activity`)}
         className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
       >
         Back

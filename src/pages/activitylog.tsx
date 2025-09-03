@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import type { Activity } from "../types";
 
@@ -16,10 +15,17 @@ export default function ActivityLog({
 }: ActivityLogProps) {
     const navigate = useNavigate();
 
+    const userJson = localStorage.getItem("currentUser");
+    const user = userJson ? JSON.parse(userJson) : null;
+
+    const userActivities = activities.filter(
+        (a) => a.email === user?.email
+    );
+
     const handleAdd = () => {
         const newId = addActivity();
-
-        navigate(`/users/current/activity/${newId}/edit`);
+        if (!newId) return;
+        navigate(`/users/${encodeURIComponent(user.email)}/activity/${newId}/edit`);
     };
 
     return (
@@ -34,19 +40,31 @@ export default function ActivityLog({
                 </button>
             </div>
 
-            {activities.length === 0 && <p>No activities yet</p>}
+            {userActivities.length === 0 && <p>No activities yet</p>}
 
-            {activities.map((activity) => (
+            {userActivities.map((activity) => (
                 <div key={activity.id} className="border p-2 mb-2 rounded">
                     <p>{activity.content || "No content"}</p>
                     <div className="mt-2 space-x-2">
                         <button
                             className="px-2 py-1 text-green-500 rounded hover:text-green-700"
                             onClick={() =>
-                                navigate(`/users/current/activity/${activity.id}/edit`)
+                                navigate(
+                                    `/users/${encodeURIComponent(user.email)}/activity/${activity.id}/edit`
+                                )
                             }
                         >
                             Edit
+                        </button>
+                        <button
+                            className="px-2 py-1 text-blue-500 rounded hover:text-blue-700"
+                            onClick={() =>
+                                navigate(
+                                    `/users/${encodeURIComponent(user.email)}/activity/${activity.id}/view`
+                                )
+                            }
+                        >
+                            View
                         </button>
                         <button
                             className="px-2 py-1 text-red-500 rounded hover:text-red-700"
