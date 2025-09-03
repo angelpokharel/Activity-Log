@@ -11,7 +11,13 @@ export default function ActivityEdit({ activities, onUpdateActivity }: ActivityE
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const existingActivity = activities.find((a) => a.id === id);
+  const userJson = localStorage.getItem("currentUser");
+  const user = userJson ? JSON.parse(userJson) : null;
+
+  const existingActivity = activities.find(
+    (a) => a.id === id && a.email === user?.email
+  );
+
   const [content, setContent] = useState(existingActivity?.content || "");
 
   if (!id || !existingActivity) {
@@ -20,7 +26,7 @@ export default function ActivityEdit({ activities, onUpdateActivity }: ActivityE
 
   const handleSave = () => {
     onUpdateActivity(id, { ...existingActivity, content });
-    navigate("../activity");
+    navigate(`/users/${encodeURIComponent(user.email)}/activity`);
   };
 
   return (

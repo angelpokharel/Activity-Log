@@ -12,7 +12,7 @@ interface User {
 const SignupSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().min(4, "Password must be at least 8 characters").required("Enter your password"),
+    password: Yup.string().min(8, "Password must be at least 8 characters").required("Enter your password"),
     confirmPassword: Yup.string().oneOf([Yup.ref('password'), undefined], "Passwords must match").required("Confirm your password"),
 });
 

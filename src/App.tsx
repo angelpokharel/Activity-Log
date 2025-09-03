@@ -11,26 +11,28 @@ import ActivityView from "./activity/view";
 
 export default function App() {
   const savedActivities = localStorage.getItem("activities");
-  const [activities, setActivities] = useState<Activity[]>(savedActivities ? JSON.parse(savedActivities) : []);
+  const [activities, setActivities] = useState<Activity[]>(
+    savedActivities ? JSON.parse(savedActivities) : []
+  );
 
   const [nextId, setNextId] = useState(1);
 
   const addActivity = (): string => {
+    const userJson = localStorage.getItem("currentUser");
+    const user = userJson ? JSON.parse(userJson) : null;
+    if (!user?.email) return "";
+
     const id = String(nextId);
     const newActivity: Activity = {
       id,
       content: "",
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      email: user.email,
     };
-
 
     const newActivities = [newActivity, ...activities];
     setActivities(newActivities);
-
-
     localStorage.setItem("activities", JSON.stringify(newActivities));
-
-
     setNextId(nextId + 1);
     return id;
   };
@@ -39,13 +41,14 @@ export default function App() {
     const updatedActivities = activities.map((activity) =>
       activity.id === id ? updatedActivity : activity
     );
-
     setActivities(updatedActivities);
     localStorage.setItem("activities", JSON.stringify(updatedActivities));
   };
 
   const deleteActivity = (id: string) => {
-    const filteredActivities = activities.filter(activity => activity.id !== id);
+    const filteredActivities = activities.filter(
+      (activity) => activity.id !== id
+    );
     setActivities(filteredActivities);
     localStorage.setItem("activities", JSON.stringify(filteredActivities));
   };
@@ -55,12 +58,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-
-        <Route
-          path="/users/:email"
-          element={<UserPage activities={activities} />}
-        >
-
+        <Route path="/users/:email" element={<UserPage activities={activities} />}>
           <Route
             path="activity"
             element={
@@ -81,12 +79,10 @@ export default function App() {
               />
             }
           />
-
           <Route
             path="activity/:id/view"
             element={<ActivityView activities={activities} />}
           />
-
           <Route path="profile" element={<Profile />} />
         </Route>
       </Routes>
