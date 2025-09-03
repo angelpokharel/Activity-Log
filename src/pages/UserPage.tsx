@@ -53,14 +53,14 @@ function UserPage({ activities }: UserPageProps) {
 
             <div className="flex-1 flex flex-col">
                 <header className="bg-white shadow p-4 flex justify-between items-center">
-                    <h1 className="text-2xl font-semibold">Welcome, {user?.name}</h1>
+                    <h1 className="text-2xl font-semibold">Welcome</h1>
 
                     <div className="relative">
                         <button
                             onClick={() => setDropdownOpen(!dropdownOpen)}
                             className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
                         >
-                            {user?.email}
+                            Menu
                         </button>
 
                         {dropdownOpen && (

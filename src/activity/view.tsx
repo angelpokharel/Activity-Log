@@ -26,7 +26,7 @@ export default function ActivityView({ activities }: ActivityViewProps) {
       <p className="mb-4">{activity.content}</p>
 
       <button
-        onClick={() => navigate(`/users/${encodeURIComponent(user.email)}/activity`)}
+        onClick={() => navigate(`/users/${encodeURIComponent(user.email)}`)}
         className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
       >
         Back
