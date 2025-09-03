@@ -59,6 +59,18 @@ export default function App() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/users/:email" element={<UserPage activities={activities} />}>
+
+
+          <Route
+            index
+            element={
+              <div className="p-4 text-center">
+
+                <p>Select an activity, check your profile or activity log from the menu.</p>
+              </div>
+            }
+          />
+
           <Route
             path="activity"
             element={
