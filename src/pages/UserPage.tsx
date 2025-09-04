@@ -33,19 +33,21 @@ function UserPage({ activities }: UserPageProps) {
     return (
         <div className="flex min-h-screen bg-gray-100">
             <aside className="w-64 bg-white shadow-lg p-4 flex flex-col">
-                <h2 className="text-xl font-bold mb-4">Activities by Date</h2>
+                <h2 className="text-xl font-semibold mb-4">Activities by Date</h2>
                 <div className="flex flex-col gap-2 ">
                     {userActivities.length === 0 ? (
                         <p className="text-gray-500 text-sm">No activities</p>
                     ) : (
                         userActivities.map((activity) => (
+
                             <button
                                 key={activity.id}
                                 onClick={() => navigate(`activity/${activity.id}/view`)}
-                                className="text-left px-2 py-1 rounded hover:bg-green-100"
+                                className="rounded px-2 py-1 hover:bg-green-100 border border-gray-100 shadow-sm text-left"
                             >
                                 {new Date(activity.createdAt).toLocaleString()}
                             </button>
+
                         ))
                     )}
                 </div>
