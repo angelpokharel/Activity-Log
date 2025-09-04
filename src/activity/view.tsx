@@ -17,20 +17,37 @@ export default function ActivityView({ activities }: ActivityViewProps) {
   );
 
   if (!activity) {
-    return <p className="p-4 text-red-500">No activity</p>;
+    return <p className="p-4 text-red-500">Activity not found</p>;
   }
 
   return (
-    <div className="p-4 max-w-2xl mx-auto border border-black rounded bg-white">
-      <p className="text-sm text-gray-500 mb-1"> id: {activity.id}</p>
-      <p className="mb-4">{activity.content}</p>
+    <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-md p-6">
 
-      <button
-        onClick={() => navigate(`/users/${encodeURIComponent(user.email)}`)}
-        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-      >
-        Back
-      </button>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-lg font-semibold text-gray-800">View Activity</h1>
+        <span className="text-xs text-gray-500">
+          {new Date(activity.createdAt).toLocaleString()}
+        </span>
+      </div>
+
+
+      <div className="border border-gray-300 rounded-lg p-3 mb-4 bg-white">
+        <p className="whitespace-pre-wrap break-words text-gray-800">
+          {activity.content || "No content"}
+        </p>
+      </div>
+
+
+      <div className="flex justify-end">
+        <button
+          onClick={() =>
+            navigate(`/users/${encodeURIComponent(user.email)}/activity`)
+          }
+          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+        >
+          Back
+        </button>
+      </div>
     </div>
   );
 }
